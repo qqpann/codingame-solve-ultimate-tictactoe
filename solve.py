@@ -94,22 +94,23 @@ class UltimateTicTacToe:
             if self.turn == 1:
                 x, y = map(int, input("Move>").split())
             else:
-                legal_actions = self.legal_actions()
-                action_rewards = [
-                    minimax(
-                        deepcopy(self).act(self.turn, x, y),
-                        DEPTH,
-                        self.turn,
-                    )
-                    for x, y in legal_actions
-                ]
-                # print(legal_actions)
-                # print(action_rewards)
-                max_reward = max(action_rewards)
-                max_actions = [
-                    a for a, r in zip(legal_actions, action_rewards) if r == max_reward
-                ]
-                x, y = random.choice(max_actions)
+                # legal_actions = self.legal_actions()
+                # action_rewards = [
+                #     minimax(
+                #         deepcopy(self).act(self.turn, x, y),
+                #         DEPTH,
+                #         self.turn,
+                #     )
+                #     for x, y in legal_actions
+                # ]
+                # # print(legal_actions)
+                # # print(action_rewards)
+                # max_reward = max(action_rewards)
+                # max_actions = [
+                #     a for a, r in zip(legal_actions, action_rewards) if r == max_reward
+                # ]
+                # x, y = random.choice(max_actions)
+                x, y = random.choice(self.legal_actions())
             end = time.perf_counter()
             print("Time:", end - start)
 
@@ -132,10 +133,12 @@ class UltimateTicTacToe:
 
             # Write an action using print
             # To debug: print("Debug messages...", file=sys.stderr, flush=True)
-
-            act = {"x": 1, "y": 1}
-
-            print(f"{act['x']} {act['y']}")
+            if opponent_col == -1 and opponent_row == -1:
+                pass
+            else:
+                self.act(2, opponent_col, opponent_row)
+            act = random.choice(self.legal_actions())
+            print(f"{act[0]} {act[1]}")
 
 
 def score(game: UltimateTicTacToe, player: int):
