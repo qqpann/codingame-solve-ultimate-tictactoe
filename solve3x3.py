@@ -155,11 +155,25 @@ class UltimateTicTacToe:
                 pass
             else:
                 # Opponent
-                self.act(2, opponent_col, opponent_row)
-            act = random.choice(get_legal_actions(self.board))
+                self.act(2, opponent_row, opponent_col)
+            legal_actions = get_legal_actions(self.board)
+            action_rewards = [
+                minimax(
+                    act(self.board.copy(), self.turn, x, y),
+                    DEPTH,
+                    get_opposite_turn(self.turn),
+                    self.turn,
+                )
+                for x, y in legal_actions
+            ]
+            max_reward = max(action_rewards)
+            max_actions = [
+                a for a, r in zip(legal_actions, action_rewards) if r == max_reward
+            ]
+            x, y = random.choice(max_actions)
             # Us
-            self.act(1, act[0], act[1])
-            print(f"{act[0]} {act[1]}")
+            self.act(1, x, y)
+            print(f"{x} {y}")
 
 
 def score(board: np.ndarray, player: int):
