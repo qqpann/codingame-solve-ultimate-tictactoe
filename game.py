@@ -1,5 +1,10 @@
 from typing import List
 
+# def iter_3x3():
+#     for x in range(3):
+#         for y in range(3):
+#             yield (x, y)
+
 
 def tic_tac_toe_winner(board: List[List[int]]):
     assert len(board) == 3 and len(board[0]) == 3
@@ -40,8 +45,12 @@ class UltimateTicTacToe:
     def __str__(self):
         return str_board(self.board)
 
-    def sub_board(self, n: int):
-        sx, sy = n % 3 * 3, n // 3 * 3
+    def nth_sub_board(self, n: int):
+        sx, sy = n % 3, n // 3
+        return self.sub_board(sx, sy)
+
+    def sub_board(self, sx: int, sy: int):
+        sx, sy = sx * 3, sy * 3
         sub = []
         for x in range(sx, sx + 3):
             sub.append([self.board[x][y] for y in range(sy, sy + 3)])
@@ -73,7 +82,16 @@ class UltimateTicTacToe:
             x, y = map(int, input("Move>").split())
             self.act(self.turn, x, y)
             for i in range(9):
-                print(str_board(self.sub_board(i)))
+                print(str_board(self.nth_sub_board(i)))
+            print("meta board")
+
+            meta = []
+            for x in range(3):
+                meta.append(
+                    [tic_tac_toe_winner(self.sub_board(x, y)) for y in range(3)]
+                )
+            print(str_board(meta))
+            print(tic_tac_toe_winner(meta))
 
 
 if __name__ == "__main__":
