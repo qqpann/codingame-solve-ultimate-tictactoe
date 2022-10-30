@@ -1,3 +1,36 @@
+from typing import List
+
+
+def tic_tac_toe_winner(board: List[List[int]]):
+    assert len(board) == 3 and len(board[0]) == 3
+    # rows -
+    for r in range(3):
+        tmp = set([board[r][c] for c in range(3)])
+        if len(tmp) == 1:
+            return list(tmp)[0]
+    # cols |
+    for c in range(3):
+        tmp = set([board[r][c] for r in range(3)])
+        if len(tmp) == 1:
+            return list(tmp)[0]
+    # diagonal \
+    tmp = set([board[i][i] for i in range(3)])
+    if len(tmp) == 1:
+        return list(tmp)[0]
+    # diagonal /
+    tmp = set([board[i][3 - 1 - i] for i in range(3)])
+    if len(tmp) == 1:
+        return list(tmp)[0]
+    return 0
+
+
+def str_board(board: List[List[int]]):
+    res = ""
+    for row in board:
+        res += "".join(map(str, row)) + "\n"
+    return res
+
+
 class UltimateTicTacToe:
     def __init__(self):
         self.board = [[0] * 9 for _ in range(9)]
@@ -5,10 +38,14 @@ class UltimateTicTacToe:
         self.turn = 1
 
     def __str__(self):
-        res = ""
-        for row in self.board:
-            res += "".join(map(str, row)) + "\n"
-        return res
+        return str_board(self.board)
+
+    def sub_board(self, n: int):
+        sx, sy = n % 3 * 3, n // 3 * 3
+        sub = []
+        for x in range(sx, sx + 3):
+            sub.append([self.board[x][y] for y in range(sy, sy + 3)])
+        return sub
 
     def flip_turn(self):
         self.turn = 2 if self.turn == 1 else 1
@@ -35,6 +72,8 @@ class UltimateTicTacToe:
             # Replace with AI here.
             x, y = map(int, input("Move>").split())
             self.act(self.turn, x, y)
+            for i in range(9):
+                print(str_board(self.sub_board(i)))
 
 
 if __name__ == "__main__":
